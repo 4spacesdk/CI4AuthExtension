@@ -1,0 +1,17 @@
+{
+    "name": "4spacesdk/ci4authextension",
+    "description": "Easy OAuth2 integration with CodeIgniter 4",
+    "type": "library",
+    "require": {
+        "php": ">=7.1",
+        "4spacesdk/ci4ormextension": "^1.0.0-beta.8",
+        "4spacesdk/ci4debugtool": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Hansen",
+            "email": "martin@4spaces.dk"
+        }
+    ]
+}
