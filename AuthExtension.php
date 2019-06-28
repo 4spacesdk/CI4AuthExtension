@@ -3,6 +3,8 @@
 use App\Models\UserModel;
 use AuthExtension\Config\LoginResponse;
 use AuthExtension\Entities\User;
+use AuthExtension\OAuth2\ServerLib;
+use DebugTool\Data;
 
 class AuthExtension {
 
@@ -56,11 +58,19 @@ class AuthExtension {
             $user = (new UserModel())
                 ->where('id', session('user_id'))
                 ->find();
+            Data::lastQuery();
             if($user->exists()) {
                 return $user;
             }
         }
         return false;
+    }
+
+    public static function authorize($trySession = false) {
+        $user = ServerLib::getInstance()->authorize(\OAuth2\Request::createFromGlobals());
+        if($trySession && !$user)
+            $user = AuthExtension::checkSession();
+        return $user;
     }
 
 }

@@ -22,7 +22,7 @@ class ServerLib {
     private static $instance;
 
     /**
-     * @return mixed
+     * @return ServerLib
      */
     public static function getInstance() {
         if(!self::$instance)
