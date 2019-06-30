@@ -13,21 +13,17 @@ class AuthExtension {
         /** @var User $user */
         $user = (new UserModel())
             ->where('username', $username)
-            ->where('password', sha1($password))
             ->find();
-        if($user->exists())
+        if(!$user->exists()) {
+            // Username not found
+            return LoginResponse::UnknownUser;
+        }
+
+        if(password_verify($password, $user->password)) // OK
             return $user->renew_password ? LoginResponse::RenewPassword : LoginResponse::Success;
-
-        // Not ok, check if username exists
-        $user = (new UserModel())
-            ->where('username', $username)
-            ->find();
-
-        if($user->exists())
+        else { // Wront password
             return LoginResponse::WrongPassword;
-
-        // Username not found
-        return LoginResponse::UnknownUser;
+        }
     }
 
     public static function login(string $username, string $password): string {
@@ -39,7 +35,6 @@ class AuthExtension {
 
                 $user = (new UserModel())
                     ->where('username', $username)
-                    ->where('password', sha1($password))
                     ->find();
 
                 $session = session();
@@ -58,7 +53,6 @@ class AuthExtension {
             $user = (new UserModel())
                 ->where('id', session('user_id'))
                 ->find();
-            Data::lastQuery();
             if($user->exists()) {
                 return $user;
             }
