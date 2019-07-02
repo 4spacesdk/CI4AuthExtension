@@ -6,7 +6,7 @@ use OrmExtension\Extensions\Entity;
  * Class OAuthAuthorizationCode
  * @package AuthExtension
  * @property string $authorization_code
- * @property int $client_id
+ * @property string $client_id
  * @property string $user_id
  * @property string $redirect_uri
  * @property string $expires

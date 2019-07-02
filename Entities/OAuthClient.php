@@ -5,7 +5,7 @@ use OrmExtension\Extensions\Entity;
 /**
  * Class OAuthClient
  * @package AuthExtension
- * @property int $client_id
+ * @property string $client_id
  * @property string $client_secret
  * @property string $redirect_uri
  * @property string $grant_types

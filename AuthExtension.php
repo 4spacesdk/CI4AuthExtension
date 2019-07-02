@@ -4,7 +4,6 @@ use App\Models\UserModel;
 use AuthExtension\Config\LoginResponse;
 use AuthExtension\Entities\User;
 use AuthExtension\OAuth2\ServerLib;
-use DebugTool\Data;
 
 class AuthExtension {
 
@@ -60,11 +59,13 @@ class AuthExtension {
         return false;
     }
 
-    public static function authorize($trySession = false) {
-        $user = ServerLib::getInstance()->authorize(\OAuth2\Request::createFromGlobals());
-        if($trySession && !$user)
-            $user = AuthExtension::checkSession();
-        return $user;
+    /**
+     * @param string $scope
+     * @return array|bool
+     */
+    public static function authorize($scope = '') {
+        $authorized = ServerLib::getInstance()->authorize(\OAuth2\Request::createFromGlobals(), $scope);
+        return $authorized;
     }
 
 }

@@ -81,41 +81,64 @@ class ServerLib {
         $this->server->addGrantType(new ClientCredentials($this->storage));
     }
 
-    public function authorize(RequestInterface $request) {
-        $response = new Response();
+    /**
+     * @param RequestInterface $request
+     * @param null $scope
+     * @return array
+     */
+    public function authorize(RequestInterface $request, $scope = null) {
+        $response = [
+            'authorized'    => null,
+            'client_id'     => null,
+            'user_id'       => null,
+            'reason'        => null
+        ];
 
         // OAuth 2.0 authentication & scope.
-        if(!$this->server->verifyResourceRequest($request, $response, null)) {
-            $this->error = json_decode($response->getResponseBody());
-            return false;
+        $oauthResponse = new Response();
+        if(!$this->server->verifyResourceRequest($request, $oauthResponse, $scope)) {
+
+            $responseBody = json_decode($oauthResponse->getResponseBody());
+            if(isset($responseBody->error_description))
+                $response['reason'] = $responseBody->error_description;
+            else if(isset($responseBody->error))
+                $response['reason'] = $responseBody->error;
+            $response['authorized'] = false;
+
+        } else {
+
+            $token = $this->server->getAccessTokenData($request, $oauthResponse);
+            $response['client_id'] = $token['client_id'];
+            $client = $this->server->getStorage('client')->getClientDetails($token['client_id']);
+
+            $user = new User();
+
+            switch($client['grant_types']) {
+                case 'client_credentials':
+                    $clientId = $token['client_id'];
+                    /** @var User $user */
+                    $user = (new UserModel())
+                        ->where('username', $clientId)
+                        ->find();
+                    break;
+                case 'implicit':
+                    $user = $user->getModel()
+                        ->where('id', $token['user_id'])
+                        ->find();
+                    break;
+            }
+
+            if(!$user->exists()) {
+                $response['authorized'] = false;
+                $response['reason'] = 'Unknown user';
+            } else {
+                $response['authorized'] = true;
+                $response['user_id'] = $user->id;
+            }
+
         }
 
-        $token = $this->server->getAccessTokenData($request, $response);
-        $client = $this->server->getStorage('client')->getClientDetails($token['client_id']);
-
-        $user = new User();
-
-        switch($client['grant_types']) {
-            case 'client_credentials':
-                $clientId = $token['client_id'];
-                /** @var User $user */
-                $user = (new UserModel())
-                    ->where('username', $clientId)
-                    ->find();
-                break;
-            case 'implicit':
-                $user = $user->getModel()
-                    ->where('id', $token['user_id'])
-                    ->find();
-                break;
-        }
-
-        if(!$user->exists()) {
-            $this->error = ['error' => 'Unknown user'];
-            return false;
-        }
-
-        return $user;
+        return $response;
     }
 
     public function getError() {
