@@ -34,7 +34,7 @@ class UserInfo {
             // Groups of claims are returned based on the requested scopes.
             // Scopes with matching claims: profile, email, address, phone.
             // http://openid.net/specs/openid-connect-core-1_0.html#ScopeClaims
-            $claims = ServerLib::getInstance()->storage->getUserClaims($user->username, $token['scope']);
+            $claims = ServerLib::getInstance()->storage->getUserClaims($user['username'], $token['scope']);
 
             // The sub Claim MUST always be returned in the UserInfo Response.
             // http://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse

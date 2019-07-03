@@ -91,7 +91,8 @@ class ServerLib {
             'authorized'    => null,
             'client_id'     => null,
             'user_id'       => null,
-            'reason'        => null
+            'reason'        => null,
+            'username'      => null
         ];
 
         // OAuth 2.0 authentication & scope.
@@ -122,6 +123,7 @@ class ServerLib {
             } else {
                 $response['authorized'] = true;
                 $response['user_id'] = $user->id;
+                $response['username'] = $user->username;
             }
 
         }
