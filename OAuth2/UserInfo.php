@@ -26,7 +26,7 @@ class UserInfo {
         }
 
         // OAuth 2.0 authentication: "openid" scope.
-        if(ServerLib::getInstance()->server->verifyResourceRequest($request, $oauthResponse, 'openid')) {
+        if(ServerLib::getInstance()->server->verifyResourceRequest($request, $oauthResponse)) {
             $token = ServerLib::getInstance()->server->getAccessTokenData($request, $oauthResponse);
 
             // The default behavior is to use "username" as user_id.
