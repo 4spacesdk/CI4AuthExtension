@@ -109,24 +109,12 @@ class ServerLib {
 
             $token = $this->server->getAccessTokenData($request, $oauthResponse);
             $response['client_id'] = $token['client_id'];
-            $client = $this->server->getStorage('client')->getClientDetails($token['client_id']);
+            //$client = $this->server->getStorage('client')->getClientDetails($token['client_id']);
 
             $user = new User();
-
-            switch($client['grant_types']) {
-                case 'client_credentials':
-                    $clientId = $token['client_id'];
-                    /** @var User $user */
-                    $user = (new UserModel())
-                        ->where('username', $clientId)
-                        ->find();
-                    break;
-                case 'implicit':
-                    $user = $user->getModel()
-                        ->where('id', $token['user_id'])
-                        ->find();
-                    break;
-            }
+            $user = $user->getModel()
+                ->where('id', $token['user_id'])
+                ->find();
 
             if(!$user->exists()) {
                 $response['authorized'] = false;

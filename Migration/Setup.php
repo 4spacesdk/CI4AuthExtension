@@ -50,7 +50,8 @@ class Setup {
 
         Table::init('oauth_scopes')
             ->create('scope', ColumnTypes::VARCHAR_127, false)
-            ->column('is_default', ColumnTypes::BOOL_0);
+            ->column('is_default', ColumnTypes::BOOL_0)
+            ->column('description', ColumnTypes::VARCHAR_1023);
 
         Table::init('oauth_jwt')
             ->create()

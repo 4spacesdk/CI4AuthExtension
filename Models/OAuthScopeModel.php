@@ -2,6 +2,10 @@
 
 use OrmExtension\Extensions\Model;
 
+/**
+ * Class OAuthScopeModel
+ * @package AuthExtension\Models
+ */
 class OAuthScopeModel extends Model {
 
     protected $primaryKey = 'scope';

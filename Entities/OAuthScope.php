@@ -7,7 +7,13 @@ use OrmExtension\Extensions\Entity;
  * @package AuthExtension
  * @property string $scope
  * @property bool $is_default
+ * @property string $description
  */
 class OAuthScope extends Entity {
+
+    /**
+     * @return \ArrayIterator|Entity[]|\Traversable|OAuthScope[]
+     */
+    public function getIterator() {return parent::getIterator();}
 
 }

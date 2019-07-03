@@ -2,6 +2,10 @@
 
 use OrmExtension\Extensions\Model;
 
+/**
+ * Class OAuthAuthorizationCodeModel
+ * @package AuthExtension\Models
+ */
 class OAuthAuthorizationCodeModel extends Model {
 
     protected $primaryKey = 'authorization_code';

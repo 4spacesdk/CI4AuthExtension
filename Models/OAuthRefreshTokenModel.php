@@ -2,6 +2,10 @@
 
 use OrmExtension\Extensions\Model;
 
+/**
+ * Class OAuthRefreshTokenModel
+ * @package AuthExtension\Models
+ */
 class OAuthRefreshTokenModel extends Model {
 
     protected $primaryKey = 'refresh_token';

@@ -40,6 +40,9 @@ class PreController {
             $routes->get('checksession', function() use ($response) {
                 \AuthExtension\OAuth2\CheckSession::handle();
             });
+            $routes->get('check', function() use ($response) {
+                \AuthExtension\OAuth2\Check::handle($response);
+            });
         }
     }
 
