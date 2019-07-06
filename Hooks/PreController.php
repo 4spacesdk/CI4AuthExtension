@@ -43,7 +43,7 @@ class PreController {
             $routes->get('check', function() use ($response) {
                 \AuthExtension\OAuth2\Check::handle($response);
             });
-            $routes->get('check/(:any?)', function($accessToken) use ($response) {
+            $routes->cli('check/(:segment)', function($accessToken) use ($response) {
                 if($accessToken) $_GET['access_token'] = $accessToken;
                 \AuthExtension\OAuth2\Check::handle($response);
             });
