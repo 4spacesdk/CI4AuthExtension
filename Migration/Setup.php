@@ -13,7 +13,7 @@ class Setup {
             ->column('last_name', ColumnTypes::VARCHAR_255)
             ->column('username', ColumnTypes::VARCHAR_255)
             ->column('password', ColumnTypes::VARCHAR_255)
-            ->column('renew_password', ColumnTypes::VARCHAR_255)
+            ->column('renew_password', ColumnTypes::BOOL_0)
             ->timestamps()
             ->softDelete();
 
