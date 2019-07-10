@@ -97,7 +97,17 @@ class ServerLib {
 
         // OAuth 2.0 authentication & scope.
         $oauthResponse = new Response();
-        if(!$this->server->verifyResourceRequest($request, $oauthResponse, $scope)) {
+
+        $scopes = $scope ? explode(' ', $scope) : [null];
+        $authorized = false;
+        foreach($scopes as $scope) {
+            if($this->server->verifyResourceRequest($request, $oauthResponse, $scope)) {
+                $authorized = true;
+                break;
+            }
+        }
+
+        if(!$authorized) {
 
             $responseBody = json_decode($oauthResponse->getResponseBody());
             if(isset($responseBody->error_description))
