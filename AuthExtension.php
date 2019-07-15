@@ -61,7 +61,7 @@ class AuthExtension {
 
     /**
      * @param string $scope
-     * @return array|bool
+     * @return array
      */
     public static function authorize($scope = '') {
         $authorized = ServerLib::getInstance()->authorize(\OAuth2\Request::createFromGlobals(), $scope);

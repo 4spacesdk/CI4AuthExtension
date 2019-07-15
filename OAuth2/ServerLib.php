@@ -9,6 +9,7 @@ use OAuth2\RequestInterface;
 use OAuth2\Response;
 use OAuth2\Server as OAuth2Server;
 use OAuth2\Storage\Pdo;
+use RestExtension\AuthorizeResponse;
 
 /**
  * Class ServerLib
