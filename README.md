@@ -66,12 +66,12 @@ class LoginResponse {
 }
 ```
 
-##Authorize with session
+## Authorize with session
 
 `$user = AuthExtension::checkSession();`  
 `$user` is either `FALSE` or the authorized User.
 
-##Authorize with OAuth2
+## Authorize with OAuth2
 
 If you enable autoRoute in Config you can authorize by calling `/check` with `access_token` as query parameter or header.   
 Check `AuthExtension\Hooks\PreController` for more routes.
