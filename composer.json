@@ -3,7 +3,7 @@
     "description": "Easy OAuth2 integration with CodeIgniter 4",
     "type": "library",
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "4spacesdk/ci4debugtool": "^1.0"
     },
     "license": "MIT",
@@ -12,5 +12,10 @@
             "name": "Martin Hansen",
             "email": "martin@4spaces.dk"
         }
-    ]
+    ],
+    "autoload": {
+        "psr-4": {
+          "AuthExtension\\": ""
+      }
+    }
 }
