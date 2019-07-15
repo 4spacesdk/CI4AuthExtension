@@ -20,7 +20,7 @@ class AuthExtension {
 
         if(password_verify($password, $user->password)) // OK
             return $user->renew_password ? LoginResponse::RenewPassword : LoginResponse::Success;
-        else { // Wront password
+        else { // Wrong password
             return LoginResponse::WrongPassword;
         }
     }
