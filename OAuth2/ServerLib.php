@@ -124,7 +124,7 @@ class ServerLib {
             //$client = $this->server->getStorage('client')->getClientDetails($token['client_id']);
 
             $user = new User();
-            $user = $user->getModel()
+            $user = $user->_getModel()
                 ->where('id', $token['user_id'])
                 ->find();
 
