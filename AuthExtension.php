@@ -7,7 +7,7 @@ use AuthExtension\OAuth2\ServerLib;
 
 class AuthExtension {
 
-    public static function checkLogin(string $username, string $password): string {
+    public static function checkLogin(string $username, string $password, string $scope = null): string {
         // Check if everything is good
         /** @var User $user */
         $user = (new UserModel())
@@ -18,6 +18,12 @@ class AuthExtension {
             return LoginResponse::UnknownUser;
         }
 
+        if($scope && isset($user->scope)) {
+            if(count(array_diff(explode(' ', $scope), explode(' ', $user->scope))) > 0) {
+                return LoginResponse::WrongScope;
+            }
+        }
+
         if(password_verify($password, $user->password)) // OK
             return $user->renew_password ? LoginResponse::RenewPassword : LoginResponse::Success;
         else { // Wrong password
@@ -25,8 +31,8 @@ class AuthExtension {
         }
     }
 
-    public static function login(string $username, string $password): string {
-        $loginResponse = AuthExtension::checkLogin($username, $password);
+    public static function login(string $username, string $password, string $scope = null): string {
+        $loginResponse = AuthExtension::checkLogin($username, $password, $scope);
 
         switch($loginResponse) {
             case LoginResponse::Success:
@@ -46,13 +52,21 @@ class AuthExtension {
     /**
      * @return User|bool
      */
-    public static function checkSession() {
+    public static function checkSession($scope = null) {
         if(session('user_id')) {
             /** @var User $user */
             $user = (new UserModel())
                 ->where('id', session('user_id'))
                 ->find();
             if($user->exists()) {
+
+                // Validate against scope
+                if($scope && isset($user->scope)) {
+                    if(count(array_diff(explode(' ', $scope), explode(' ', $user->scope))) > 0) {
+                        return false;
+                    }
+                }
+
                 return $user;
             }
         }

@@ -15,10 +15,8 @@ class Authorize {
      * @param Response $response
      */
     public static function handle($response) {
-        $sessionCheck = AuthExtension::checkSession();
-
-        $request = \OAuth2\Request::createFromGlobals();
         $oauthResponse = new \OAuth2\Response();
+        $request = \OAuth2\Request::createFromGlobals();
 
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
         if(!ServerLib::getInstance()->server->validateAuthorizeRequest($request, $oauthResponse)) {
@@ -30,6 +28,10 @@ class Authorize {
 
         // Stores the request.
         session()->setFlashdata('request', $request);
+
+        // Session Check
+        $scope = $request->query('scope');
+        $sessionCheck = AuthExtension::checkSession($scope);
 
         // Silent renew.
         // The Authorization Server MUST NOT display any authentication or consent user interface pages.
@@ -51,7 +53,7 @@ class Authorize {
             $redirectUri = '/authorize' . '?' . $_SERVER['QUERY_STRING'];
             session()->setFlashdata('requestUrl', $redirectUri);
             // Redirects to login.
-            $response->redirect('/login');
+            $response->redirect('/login' . '?scope='.$scope);
             return;
         }
 

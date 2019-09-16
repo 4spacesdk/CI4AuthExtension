@@ -6,5 +6,6 @@ class LoginResponse {
     const RenewPassword     = 'RenewPassword';
     const WrongPassword     = 'WrongPassword';
     const UnknownUser       = 'UnknownUser';
+    const WrongScope        = 'WrongScope';
 
 }
