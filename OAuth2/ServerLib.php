@@ -6,6 +6,7 @@ use CodeIgniter\Config\Config;
 use Config\Database;
 use OAuth2\GrantType\AuthorizationCode;
 use OAuth2\GrantType\ClientCredentials;
+use OAuth2\GrantType\RefreshToken;
 use OAuth2\RequestInterface;
 use OAuth2\Response;
 use OAuth2\Server as OAuth2Server;
@@ -76,12 +77,16 @@ class ServerLib {
                  */
                 'id_lifetime' => 900,
                 'access_lifetime' => 900, // 900 = 15min
-                'require_exact_redirect_uri' => false // For silent refresh.
+                'require_exact_redirect_uri' => false, // For silent refresh.
+                'always_issue_new_refresh_token' => true
             ]
         );
 
         $this->server->addGrantType(new ClientCredentials($this->storage));
         $this->server->addGrantType(new AuthorizationCode($this->storage));
+        $this->server->addGrantType(new RefreshToken($this->storage, [
+            'always_issue_new_refresh_token' => true
+        ]));
     }
 
     /**
