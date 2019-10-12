@@ -40,7 +40,7 @@ class Setup {
             ->column('redirect_uri', ColumnTypes::VARCHAR_2047)
             ->column('expires', ColumnTypes::TIMESTAMP)
             ->column('scope', ColumnTypes::VARCHAR_4095_NULL)
-            ->column('id_token', ColumnTypes::VARCHAR_1023);
+            ->column('id_token', ColumnTypes::VARCHAR_1023_NULL);
 
         Table::init('oauth_refresh_tokens')
             ->create('refresh_token', ColumnTypes::VARCHAR_63, false)
