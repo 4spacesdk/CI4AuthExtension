@@ -4,6 +4,7 @@ use App\Entities\User;
 use App\Models\UserModel;
 use CodeIgniter\Config\Config;
 use Config\Database;
+use OAuth2\GrantType\AuthorizationCode;
 use OAuth2\GrantType\ClientCredentials;
 use OAuth2\RequestInterface;
 use OAuth2\Response;
@@ -80,6 +81,7 @@ class ServerLib {
         );
 
         $this->server->addGrantType(new ClientCredentials($this->storage));
+        $this->server->addGrantType(new AuthorizationCode($this->storage));
     }
 
     /**
