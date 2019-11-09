@@ -26,6 +26,11 @@ class AuthExtension extends BaseConfig {
      */
     public $autoRoute   = true;
 
+    /*
+     * OAuth Access token life time in seconds
+     */
+    public $oauthAccessTokenLifeTime    = HOUR;
+
 }
 ```
 

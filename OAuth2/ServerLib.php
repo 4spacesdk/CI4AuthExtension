@@ -3,6 +3,7 @@
 use App\Entities\User;
 use App\Models\UserModel;
 use CodeIgniter\Config\Config;
+use Config\AuthExtension;
 use Config\Database;
 use OAuth2\GrantType\AuthorizationCode;
 use OAuth2\GrantType\ClientCredentials;
@@ -38,8 +39,10 @@ class ServerLib {
     }
 
     private function setup() {
+        /** @var AuthExtension $config */
+        $config = Config::get('AuthExtension');
         $db = new Database();
-        $dbGroupName = Config::get('AuthExtension')->dbGroupName;
+        $dbGroupName = $config->dbGroupName;
         $dbGroup = $db->{$dbGroupName};
         $dsn = "mysql:dbname={$dbGroup['database']};host={$dbGroup['hostname']}";
         $dbUsername = $dbGroup['username'];
@@ -76,7 +79,7 @@ class ServerLib {
                  *'use_jwt_access_tokens' => true,
                  */
                 'id_lifetime' => 900,
-                'access_lifetime' => 900, // 900 = 15min
+                'access_lifetime' => $config->oauthAccessTokenLifeTime ?? 900, // 900 = 15min
                 'require_exact_redirect_uri' => false, // For silent refresh.
                 'always_issue_new_refresh_token' => true
             ]
