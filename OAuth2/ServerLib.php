@@ -37,7 +37,7 @@ class ServerLib {
     }
 
     private function setup() {
-        /** @var AuthExtension $config */
+        /** @var AuthExtension $authConfig */
         $authConfig = Config::get('AuthExtension');
         $db = new Database();
         $dbGroupName = $authConfig->dbGroupName;
