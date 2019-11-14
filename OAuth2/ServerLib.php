@@ -1,7 +1,6 @@
 <?php namespace AuthExtension\OAuth2;
 
 use App\Entities\User;
-use App\Models\UserModel;
 use CodeIgniter\Config\Config;
 use Config\AuthExtension;
 use Config\Database;
@@ -12,7 +11,6 @@ use OAuth2\RequestInterface;
 use OAuth2\Response;
 use OAuth2\Server as OAuth2Server;
 use OAuth2\Storage\Pdo;
-use RestExtension\AuthorizeResponse;
 
 /**
  * Class ServerLib
@@ -40,9 +38,9 @@ class ServerLib {
 
     private function setup() {
         /** @var AuthExtension $config */
-        $config = Config::get('AuthExtension');
+        $authConfig = Config::get('AuthExtension');
         $db = new Database();
-        $dbGroupName = $config->dbGroupName;
+        $dbGroupName = $authConfig->dbGroupName;
         $dbGroup = $db->{$dbGroupName};
         $dsn = "mysql:dbname={$dbGroup['database']};host={$dbGroup['hostname']}";
         $dbUsername = $dbGroup['username'];
@@ -78,8 +76,8 @@ class ServerLib {
                  *
                  *'use_jwt_access_tokens' => true,
                  */
-                'id_lifetime' => 900,
-                'access_lifetime' => $config->oauthAccessTokenLifeTime ?? 900, // 900 = 15min
+                'id_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
+                'access_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
                 'require_exact_redirect_uri' => false, // For silent refresh.
                 'always_issue_new_refresh_token' => true
             ]
