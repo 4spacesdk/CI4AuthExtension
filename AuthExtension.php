@@ -1,7 +1,7 @@
 <?php namespace AuthExtension;
 
-use App\Models\UserModel;
 use AuthExtension\Config\LoginResponse;
+use AuthExtension\Models\UserModel;
 use AuthExtension\Entities\User;
 use AuthExtension\OAuth2\ServerLib;
 
