@@ -50,10 +50,10 @@ class Authorize {
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Authenticates
         if(!$sessionCheck) {
             // Stores the request.
-            $redirectUri = '/authorize' . '?' . $_SERVER['QUERY_STRING'];
+            $redirectUri = base_url('/authorize') . '?' . $_SERVER['QUERY_STRING'];
             session()->setFlashdata('requestUrl', $redirectUri);
             // Redirects to login.
-            $response->redirect('/login' . '?scope='.$scope);
+            $response->redirect(base_url('/login') . '?scope='.$scope);
             return;
         }
 
