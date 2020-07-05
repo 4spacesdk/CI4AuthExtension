@@ -101,7 +101,8 @@ class ServerLib {
             'client_id'     => null,
             'user_id'       => null,
             'reason'        => null,
-            'username'      => null
+            'username'      => null,
+            'user_data'     => null,
         ];
 
         // OAuth 2.0 authentication & scope.
@@ -129,7 +130,6 @@ class ServerLib {
 
             $token = $this->server->getAccessTokenData($request, $oauthResponse);
             $response['client_id'] = $token['client_id'];
-            //$client = $this->server->getStorage('client')->getClientDetails($token['client_id']);
 
             $user = new User();
             $user = $user->_getModel()
@@ -143,6 +143,7 @@ class ServerLib {
                 $response['authorized'] = true;
                 $response['user_id'] = $user->id;
                 $response['username'] = $user->username;
+                $response['user_data'] = $user->toArray();
             }
 
         }
