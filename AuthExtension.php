@@ -13,18 +13,18 @@ class AuthExtension {
         $user = (new UserModel())
             ->where('username', $username)
             ->find();
-        if(!$user->exists()) {
+        if (!$user->exists()) {
             // Username not found
             return LoginResponse::UnknownUser;
         }
 
-        if($scope && isset($user->scope)) {
-            if(count(array_diff(explode(' ', $scope), explode(' ', $user->scope))) > 0) {
+        if ($scope && isset($user->scope)) {
+            if (count(array_diff(explode(' ', $scope), explode(' ', $user->scope))) > 0) {
                 return LoginResponse::WrongScope;
             }
         }
 
-        if(password_verify($password, $user->password)) // OK
+        if (password_verify($password, $user->password)) // OK
             return $user->renew_password ? LoginResponse::RenewPassword : LoginResponse::Success;
         else { // Wrong password
             return LoginResponse::WrongPassword;
@@ -34,7 +34,7 @@ class AuthExtension {
     public static function login(string $username, string $password, string $scope = null): string {
         $loginResponse = AuthExtension::checkLogin($username, $password, $scope);
 
-        switch($loginResponse) {
+        switch ($loginResponse) {
             case LoginResponse::Success:
             case LoginResponse::RenewPassword:
 
@@ -53,18 +53,16 @@ class AuthExtension {
      * @return User|bool
      */
     public static function checkSession($scope = null) {
-        if(session('user_id')) {
+        if (session('user_id')) {
             /** @var User $user */
             $user = (new UserModel())
                 ->where('id', session('user_id'))
                 ->find();
-            if($user->exists()) {
+            if ($user->exists()) {
 
                 // Validate against scope
-                if($scope && isset($user->scope)) {
-                    if(count(array_diff(explode(' ', $scope), explode(' ', $user->scope))) > 0) {
-                        return false;
-                    }
+                if ($scope && isset($user->scope) && !in_array($scope, explode(' ', $user->scope))) {
+                    return false;
                 }
 
                 return $user;
