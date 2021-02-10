@@ -15,4 +15,12 @@ use OrmExtension\Extensions\Entity;
  */
 class OAuthAuthorizationCode extends Entity {
 
+
+    /**
+     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthAuthorizationCode[]
+     */
+    public function getIterator() {
+        return parent::getIterator();
+    }
+
 }

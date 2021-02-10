@@ -3,20 +3,19 @@
 use OrmExtension\Extensions\Entity;
 
 /**
- * Class OAuthClient
+ * Class OAuthRefreshToken
  * @package AuthExtension
+ * @property string $refresh_token
  * @property string $client_id
- * @property string $client_secret
- * @property string $redirect_uri
- * @property string $grant_types
- * @property string $scope
  * @property string $user_id
+ * @property string $expires
+ * @property string $scope
  */
-class OAuthClient extends Entity {
+class OAuthRefreshToken extends Entity {
 
 
     /**
-     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthClient[]
+     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthRefreshToken[]
      */
     public function getIterator() {
         return parent::getIterator();

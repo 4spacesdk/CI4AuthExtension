@@ -13,4 +13,12 @@ use OrmExtension\Extensions\Entity;
  */
 class OAuthAccessToken extends Entity {
 
+
+    /**
+     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthAccessToken[]
+     */
+    public function getIterator() {
+        return parent::getIterator();
+    }
+
 }

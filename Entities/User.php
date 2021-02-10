@@ -15,4 +15,11 @@ class User extends Entity {
         return $this->first_name . (strlen($this->last_name) ? ' '.$this->last_name : '');
     }
 
+    /**
+     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|User[]
+     */
+    public function getIterator() {
+        return parent::getIterator();
+    }
+
 }

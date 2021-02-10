@@ -11,4 +11,12 @@ use OrmExtension\Extensions\Entity;
  */
 class OAuthJwt extends Entity {
 
+
+    /**
+     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthJwt[]
+     */
+    public function getIterator() {
+        return parent::getIterator();
+    }
+
 }
