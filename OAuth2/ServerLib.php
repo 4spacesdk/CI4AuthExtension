@@ -88,6 +88,8 @@ class ServerLib {
         $this->server->addGrantType(new RefreshToken($this->storage, [
             'always_issue_new_refresh_token' => true
         ]));
+
+        $this->server->setScopeUtil(new ScopeUtil($this->storage));
     }
 
     /**
