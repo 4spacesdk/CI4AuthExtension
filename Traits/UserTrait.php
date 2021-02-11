@@ -10,6 +10,7 @@
  * @property string $username
  * @property string $password
  * @property bool $renew_password
+ * @property string $scope
  */
 trait UserTrait {
 

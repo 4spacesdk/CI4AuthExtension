@@ -1,6 +1,7 @@
 <?php namespace AuthExtension\OAuth2;
 
 use AuthExtension\AuthExtension;
+use AuthExtension\Entities\User;
 use CodeIgniter\HTTP\Response;
 use Exception;
 use OAuth2\RequestInterface;
@@ -17,21 +18,32 @@ class Authorize {
     public static function handle($response) {
         $oauthResponse = new \OAuth2\Response();
         $request = \OAuth2\Request::createFromGlobals();
+        $server = ServerLib::getInstance()->server;
 
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
-        if(!ServerLib::getInstance()->server->validateAuthorizeRequest($request, $oauthResponse)) {
+        if(!$server->validateAuthorizeRequest($request, $oauthResponse)) {
             $response->setStatusCode($oauthResponse->getStatusCode());
             $response->setJSON($oauthResponse->getResponseBody());
             $response->send();
             return;
         }
 
-        // Stores the request.
+        // Stores the request
         session()->setFlashdata('request', $request);
 
         // Session Check
-        $scope = $request->query('scope');
-        $sessionCheck = AuthExtension::checkSession($scope);
+        $sessionCheck = AuthExtension::checkSession();
+
+        // Check user scopes
+        $requestedScope = $request->request('scope', $request->query('scope'));
+        if ($sessionCheck instanceof User) {
+            if ($requestedScope) {
+                $userScopes = $sessionCheck->scope;
+                if (!$server->getScopeUtil()->checkScope($requestedScope, $userScopes)) {
+                    return false;
+                }
+            }
+        }
 
         // Silent renew.
         // The Authorization Server MUST NOT display any authentication or consent user interface pages.
@@ -53,7 +65,7 @@ class Authorize {
             $redirectUri = base_url('/authorize') . '?' . $_SERVER['QUERY_STRING'];
             session()->setFlashdata('requestUrl', $redirectUri);
             // Redirects to login.
-            $response->redirect(base_url('/login') . '?scope='.$scope);
+            $response->redirect(base_url('/login') . '?scope='.$requestedScope);
             return;
         }
 

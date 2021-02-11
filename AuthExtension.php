@@ -52,19 +52,13 @@ class AuthExtension {
     /**
      * @return User|bool
      */
-    public static function checkSession($scope = null) {
+    public static function checkSession() {
         if (session('user_id')) {
             /** @var User $user */
             $user = (new UserModel())
                 ->where('id', session('user_id'))
                 ->find();
             if ($user->exists()) {
-
-                // Validate against scope
-                if ($scope && isset($user->scope) && !in_array($scope, explode(' ', $user->scope))) {
-                    return false;
-                }
-
                 return $user;
             }
         }
