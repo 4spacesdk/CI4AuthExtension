@@ -131,6 +131,7 @@ class ServerLib {
         } else {
 
             $token = $this->server->getAccessTokenData($request, $oauthResponse);
+            $response['token'] = $token;
             $response['client_id'] = $token['client_id'];
 
             $user = new User();
