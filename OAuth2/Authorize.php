@@ -36,11 +36,11 @@ class Authorize {
 
         // Check user scopes
         $requestedScope = $request->request('scope', $request->query('scope'));
-        if ($sessionCheck instanceof User) {
+        if ($sessionCheck) {
             if ($requestedScope) {
                 $userScopes = $sessionCheck->scope;
                 if (!$server->getScopeUtil()->checkScope($requestedScope, $userScopes)) {
-                    return false;
+                    $sessionCheck = false;
                 }
             }
         }
