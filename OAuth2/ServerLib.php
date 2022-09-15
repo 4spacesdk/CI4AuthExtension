@@ -42,7 +42,11 @@ class ServerLib {
         $db = new Database();
         $dbGroupName = $authConfig->dbGroupName;
         $dbGroup = $db->{$dbGroupName};
-        $dsn = "mysql:dbname={$dbGroup['database']};host={$dbGroup['hostname']}";
+        if (isset($dbGroup['DSN']) && strlen($dbGroup['DSN']) > 0) {
+            $dsn = $dbGroup['DSN'];
+        } else {
+            $dsn = "mysql:dbname={$dbGroup['database']};host={$dbGroup['hostname']}";
+        }
         $dbUsername = $dbGroup['username'];
         $dbPassword = $dbGroup['password'];
 
