@@ -5,7 +5,7 @@
     "require": {
         "php": ">=7.2",
         "4spacesdk/ci4debugtool": "^1.0",
-        "bshaffer/oauth2-server-php": "^1.11"
+        "bshaffer/oauth2-server-php": "v1.13.0"
     },
     "license": "MIT",
     "authors": [
