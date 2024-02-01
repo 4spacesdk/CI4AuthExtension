@@ -39,6 +39,7 @@ Step 3)
 Add this line to your `application/Config/Events.php` file 
 ```php
 Events::on('pre_system', [\AuthExtension\Hooks\PreController::class, 'execute']);
+Events::on('pre_command', [\AuthExtension\Hooks\PreController::class, 'execute']);
 ```
 
 
