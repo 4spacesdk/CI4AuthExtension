@@ -1,6 +1,5 @@
 <?php namespace AuthExtension\Hooks;
 
-use CodeIgniter\Config\Config;
 use Config\OrmExtension;
 use Config\Services;
 
@@ -15,7 +14,7 @@ class PreController {
         OrmExtension::$modelNamespace[] = 'AuthExtension\Models\\';
         OrmExtension::$entityNamespace[] = 'AuthExtension\Entities\\';
 
-        if(Config::get('AuthExtension')->autoRoute) {
+        if(config('AuthExtension')->autoRoute) {
             $routes = Services::routes(true);
             $response = Services::response();
 

@@ -1,7 +1,6 @@
 <?php namespace AuthExtension\OAuth2;
 
 use App\Entities\User;
-use CodeIgniter\Config\Config;
 use Config\AuthExtension;
 use Config\Database;
 use OAuth2\GrantType\AuthorizationCode;
@@ -38,7 +37,7 @@ class ServerLib {
 
     private function setup() {
         /** @var AuthExtension $authConfig */
-        $authConfig = Config::get('AuthExtension');
+        $authConfig = config('AuthExtension');
         $db = new Database();
         $dbGroupName = $authConfig->dbGroupName;
         $dbGroup = $db->{$dbGroupName};
