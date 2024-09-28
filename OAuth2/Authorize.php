@@ -1,27 +1,21 @@
 <?php namespace AuthExtension\OAuth2;
 
 use AuthExtension\AuthExtension;
-use AuthExtension\Entities\User;
-use CodeIgniter\HTTP\Response;
+use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
+use OAuth2\Request;
 use OAuth2\RequestInterface;
+use OAuth2\Response;
 
-/**
- * Class Authorize
- * @package AuthExtension\OAuth2
- */
 class Authorize {
 
-    /**
-     * @param Response $response
-     */
-    public static function handle($response) {
-        $oauthResponse = new \OAuth2\Response();
-        $request = \OAuth2\Request::createFromGlobals();
-        $server = ServerLib::getInstance()->server;
+    public static function handle(ResponseInterface $response): void {
+        $request = Request::createFromGlobals();
+        $oauthResponse = new Response();
 
+        $server = ServerLib::getInstance()->server;
         // Validates the authorize request. If it is invalid, redirects back to the client with the errors.
-        if(!$server->validateAuthorizeRequest($request, $oauthResponse)) {
+        if (!$server->validateAuthorizeRequest($request, $oauthResponse)) {
             $response->setStatusCode($oauthResponse->getStatusCode());
             $response->setJSON($oauthResponse->getResponseBody());
             $response->send();
@@ -38,7 +32,7 @@ class Authorize {
         $requestedScope = $request->request('scope', $request->query('scope'));
         if ($sessionCheck) {
             if ($requestedScope) {
-                $userScopes = $sessionCheck->scope;
+                $userScopes = implode(' ', array_merge(['openid', 'offline_access'], explode(' ', $sessionCheck->scope)));
                 if (!$server->getScopeUtil()->checkScope($requestedScope, $userScopes)) {
                     $sessionCheck = false;
                 }
@@ -48,8 +42,8 @@ class Authorize {
         // Silent renew.
         // The Authorization Server MUST NOT display any authentication or consent user interface pages.
         $prompt = $request->query('prompt');
-        if($prompt && $prompt == 'none') {
-            if($sessionCheck) {
+        if ($prompt && $prompt == 'none') {
+            if ($sessionCheck) {
                 self::authorizePost($response, true);
                 return;
             } else {
@@ -60,32 +54,31 @@ class Authorize {
 
         // Authenticates End-User.
         // http://openid.net/specs/openid-connect-implicit-1_0.html#Authenticates
-        if(!$sessionCheck) {
+        if (!$sessionCheck) {
             // Stores the request.
             $redirectUri = base_url('/authorize') . '?' . $_SERVER['QUERY_STRING'];
             session()->setFlashdata('requestUrl', $redirectUri);
             // Redirects to login.
-            $response->redirect(base_url('/login') . '?scope='.$requestedScope);
+            /** @var \Config\AuthExtension $authConfig */
+            $authConfig = config('AuthExtension');
+            $response->redirect(base_url($authConfig->loginPage) . '?scope=' . $requestedScope);
             return;
         }
 
         self::authorizePost($response, true);
     }
 
-    /**
-     * @param Response $response
-     * @param bool $no_prompt
-     */
-    private static function authorizePost($response, $no_prompt = false) {
+    private static function authorizePost(ResponseInterface $response, bool $no_prompt = false): void {
         // Gets the request.
         /** @var RequestInterface $request */
         $request = session()->getFlashdata('request');
-        $oauthResponse = new \OAuth2\Response();
+        $oauthResponse = new Response();
         $is_authorized = isset($_POST['authorize']) || $no_prompt;
 
         $sessionCheck = AuthExtension::checkSession();
-        if($sessionCheck)
+        if ($sessionCheck) {
             ServerLib::getInstance()->server->handleAuthorizeRequest($request, $oauthResponse, $is_authorized, $sessionCheck->id);
+        }
 
         // Session management:
         // http://openid.net/specs/openid-connect-session-1_0.html#CreatingUpdatingSessions
@@ -100,7 +93,7 @@ class Authorize {
             $header = $oauthResponse->getHttpHeader('Location');
             $header = $header . '&session_state=' . $session_state;
             $response->redirect($header);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $oauthResponse->setError(500, $e->getMessage());
             $response->setStatusCode($oauthResponse->getStatusCode());
             $response->setJSON($oauthResponse->getResponseBody());
@@ -114,7 +107,7 @@ class Authorize {
      * @return string
      * @throws Exception
      */
-    private static function calculateSessionState($request, $browser_state) {
+    private static function calculateSessionState($request, $browser_state): string {
         $client_id = $request->query('client_id');
         // Redirect URI in the request is different for silent renew.
         $client_details = ServerLib::getInstance()->server->getStorage('client')->getClientDetails($client_id);

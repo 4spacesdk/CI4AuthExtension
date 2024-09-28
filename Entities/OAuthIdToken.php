@@ -3,18 +3,18 @@
 use OrmExtension\Extensions\Entity;
 
 /**
- * Class OAuthAccessToken
- * @package AuthExtension
- * @property string $access_token
+ * Class OAuthIdToken
+ * @property string $id_token
  * @property string $client_id
  * @property string $user_id
  * @property string $expires
- * @property string $scope
+ * @property string $nonce
+ * @property string $claims
  */
-class OAuthAccessToken extends Entity {
+class OAuthIdToken extends Entity {
 
     /**
-     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthAccessToken[]
+     * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthIdToken[]
      */
     public function getIterator(): \ArrayIterator {
         return parent::getIterator();

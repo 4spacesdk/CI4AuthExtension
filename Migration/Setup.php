@@ -27,27 +27,41 @@ class Setup {
             ->column('user_id', ColumnTypes::VARCHAR_127);
 
         Table::init('oauth_access_tokens')
-            ->create('access_token', ColumnTypes::VARCHAR_63, false)
+            ->create()
+            ->column('access_token', ColumnTypes::VARCHAR_4095)
             ->column('client_id', ColumnTypes::VARCHAR_127)
             ->column('user_id', ColumnTypes::VARCHAR_127)
             ->column('expires', ColumnTypes::TIMESTAMP)
             ->column('scope', ColumnTypes::VARCHAR_4095_NULL);
 
+        Table::init('oauth_id_tokens')
+            ->create()
+            ->column('id_token', ColumnTypes::VARCHAR_4095)
+            ->column('client_id', ColumnTypes::VARCHAR_127)
+            ->column('user_id', ColumnTypes::VARCHAR_127)
+            ->column('expires', ColumnTypes::TIMESTAMP)
+            ->column('nonce', ColumnTypes::VARCHAR_4095_NULL)
+            ->column('claims', ColumnTypes::VARCHAR_4095_NULL);
+
         Table::init('oauth_authorization_codes')
-            ->create('authorization_code', ColumnTypes::VARCHAR_63, false)
+            ->create()
+            ->column('authorization_code', ColumnTypes::VARCHAR_4095)
             ->column('client_id', ColumnTypes::VARCHAR_127)
             ->column('user_id', ColumnTypes::VARCHAR_127)
             ->column('redirect_uri', ColumnTypes::VARCHAR_2047)
             ->column('expires', ColumnTypes::TIMESTAMP)
             ->column('scope', ColumnTypes::VARCHAR_4095_NULL)
-            ->column('id_token', ColumnTypes::VARCHAR_1023_NULL);
+            ->column('id_token', ColumnTypes::VARCHAR_1023_NULL)
+            ->column('code_challenge', 'VARCHAR(1000)')
+            ->column('code_challenge_method', 'VARCHAR(20)');
 
         Table::init('oauth_refresh_tokens')
-            ->create('refresh_token', ColumnTypes::VARCHAR_63, false)
+            ->create()
+            ->column('refresh_token', ColumnTypes::VARCHAR_4095)
             ->column('client_id', ColumnTypes::VARCHAR_127)
             ->column('user_id', ColumnTypes::VARCHAR_127)
             ->column('expires', ColumnTypes::TIMESTAMP)
-            ->column('scope', ColumnTypes::VARCHAR_4095);
+            ->column('scope', ColumnTypes::VARCHAR_4095_NULL);
 
         Table::init('oauth_scopes')
             ->create('scope', ColumnTypes::VARCHAR_127, false)
@@ -62,9 +76,9 @@ class Setup {
 
         Table::init('oauth_public_keys')
             ->create()
-            ->column('client_id', ColumnTypes::VARCHAR_127)
+            ->column('client_id', 'VARCHAR(127)')
             ->column('public_key', ColumnTypes::VARCHAR_2047)
-            ->column('private_key', ColumnTypes::VARCHAR_2047)
+            ->column('private_key', ColumnTypes::VARCHAR_4095)
             ->column('encryption_algorithm', ColumnTypes::VARCHAR_127, 'RS256');
     }
 
@@ -72,6 +86,7 @@ class Setup {
         Table::init('users')->dropTable();
         Table::init('oauth_clients')->dropTable();
         Table::init('oauth_access_tokens')->dropTable();
+        Table::init('oauth_id_tokens')->dropTable();
         Table::init('oauth_authorization_codes')->dropTable();
         Table::init('oauth_refresh_tokens')->dropTable();
         Table::init('oauth_scopes')->dropTable();

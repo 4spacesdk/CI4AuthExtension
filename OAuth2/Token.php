@@ -1,20 +1,12 @@
 <?php namespace AuthExtension\OAuth2;
 
-use AuthExtension\AuthExtension;
+use CodeIgniter\HTTP\ResponseInterface;
 use OAuth2\Request;
-use OAuth2\Response;
 
-/**
- * Class Token
- * @package AuthExtension\OAuth2
- */
 class Token {
 
-    /**
-     * @param \CodeIgniter\HTTP\Response $response
-     */
-    public static function handle($response) {
-        /** @var Response $oauthResponse */
+    public static function handle(ResponseInterface $response): void {
+        /** @var \OAuth2\Response $oauthResponse */
         $oauthResponse = ServerLib::getInstance()->server->handleTokenRequest(Request::createFromGlobals());
 
         $response->setStatusCode($oauthResponse->getStatusCode());

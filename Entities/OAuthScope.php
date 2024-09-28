@@ -14,6 +14,8 @@ class OAuthScope extends Entity {
     /**
      * @return \ArrayIterator|Entity[]|\Traversable|OAuthScope[]
      */
-    public function getIterator() {return parent::getIterator();}
+    public function getIterator(): \ArrayIterator {
+        return parent::getIterator();
+    }
 
 }

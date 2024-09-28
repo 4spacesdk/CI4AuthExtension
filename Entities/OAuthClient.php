@@ -18,7 +18,7 @@ class OAuthClient extends Entity {
     /**
      * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthClient[]
      */
-    public function getIterator() {
+    public function getIterator(): \ArrayIterator {
         return parent::getIterator();
     }
 

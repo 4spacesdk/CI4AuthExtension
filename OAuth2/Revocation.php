@@ -1,20 +1,14 @@
 <?php namespace AuthExtension\OAuth2;
 
-use CodeIgniter\HTTP\Response;
+use CodeIgniter\HTTP\ResponseInterface;
 use OAuth2\Request;
+use OAuth2\Response;
 
-/**
- * Class Revocation
- * @package AuthExtension\OAuth2
- */
 class Revocation {
 
-    /**
-     * @param Response $response
-     */
-    public static function handle($response) {
+    public static function handle(ResponseInterface $response): void {
         $request = Request::createFromGlobals();
-        $oauthResponse = new \OAuth2\Response();
+        $oauthResponse = new Response();
         ServerLib::getInstance()->server->handleRevokeRequest($request, $oauthResponse);
 
         $response->setStatusCode($oauthResponse->getStatusCode());

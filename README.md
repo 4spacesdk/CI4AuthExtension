@@ -18,18 +18,28 @@ class AuthExtension extends BaseConfig {
     /*
      * Specify the database group
      */
-    public $dbGroupName = 'default';
+    public string $dbGroupName = 'default';
 
     /*
      * If true, AuthExtension will extend routes with default endpoints
      * Check CI4AuthExtension/Hooks/PreController.php for details
      */
-    public $autoRoute   = true;
+    public bool $autoRoute = true;
 
     /*
-     * OAuth Access token life time in seconds
+     * OAuth Access token lifetime in seconds
      */
-    public $oauthAccessTokenLifeTime    = HOUR;
+    public int $oauthAccessTokenLifeTime = 15 * MINUTE;
+
+    /*
+     * OAuth Access token lifetime in seconds
+     */
+    public int $oauthRefreshTokenLifeTime = 7 * DAY;
+
+    /*
+     * Path to login page
+     */
+    public string $loginPage = '/login';
 
 }
 ```

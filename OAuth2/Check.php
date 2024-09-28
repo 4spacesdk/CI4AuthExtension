@@ -1,15 +1,12 @@
 <?php namespace AuthExtension\OAuth2;
 
 use AuthExtension\AuthExtension;
-use CodeIgniter\HTTP\Response;
+use CodeIgniter\HTTP\ResponseInterface;
 use Config\Services;
 
 class Check {
 
-    /**
-     * @param Response $response
-     */
-    public static function handle(Response $response) {
+    public static function handle(ResponseInterface $response): void {
         $authorized = AuthExtension::authorize(Services::request()->getGet('scope'));
         $response->setJSON($authorized);
         $response->send();

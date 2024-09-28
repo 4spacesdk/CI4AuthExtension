@@ -13,11 +13,10 @@ use OrmExtension\Extensions\Entity;
  */
 class OAuthRefreshToken extends Entity {
 
-
     /**
      * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthRefreshToken[]
      */
-    public function getIterator() {
+    public function getIterator(): \ArrayIterator {
         return parent::getIterator();
     }
 

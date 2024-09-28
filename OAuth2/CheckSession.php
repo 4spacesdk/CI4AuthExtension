@@ -1,12 +1,5 @@
 <?php namespace AuthExtension\OAuth2;
 
-use CodeIgniter\HTTP\Request;
-use CodeIgniter\HTTP\Response;
-
-/**
- * Class CheckSession
- * @package AuthExtension\OAuth2
- */
 class CheckSession {
 
     public static function handle() {

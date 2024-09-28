@@ -12,11 +12,10 @@ use OrmExtension\Extensions\Entity;
  */
 class OAuthPublicKey extends Entity {
 
-
     /**
      * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthPublicKey[]
      */
-    public function getIterator() {
+    public function getIterator(): \ArrayIterator {
         return parent::getIterator();
     }
 

@@ -4,6 +4,7 @@ use AuthExtension\Config\LoginResponse;
 use AuthExtension\Models\UserModel;
 use AuthExtension\Entities\User;
 use AuthExtension\OAuth2\ServerLib;
+use OAuth2\Request;
 
 class AuthExtension {
 
@@ -103,13 +104,8 @@ class AuthExtension {
         return false;
     }
 
-    /**
-     * @param string $scope
-     * @return array
-     */
-    public static function authorize($scope = '') {
-        $authorized = ServerLib::getInstance()->authorize(\OAuth2\Request::createFromGlobals(), $scope);
-        return $authorized;
+    public static function authorize($scope = ''): array {
+        return ServerLib::getInstance()->authorize(Request::createFromGlobals(), $scope);
     }
 
 }

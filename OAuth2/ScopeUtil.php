@@ -5,7 +5,7 @@ use OAuth2\Scope;
 
 class ScopeUtil extends Scope {
 
-    public function getScopeFromRequest(RequestInterface $request) {
+    public function getScopeFromRequest(RequestInterface $request): string {
         $requestedScopes = parent::getScopeFromRequest($request);
         $defaultScopes = parent::getDefaultScope();
         return implode(' ', array_unique(array_merge(

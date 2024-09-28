@@ -2,10 +2,6 @@
 
 use OrmExtension\Extensions\Model;
 
-/**
- * Class OAuthPublicKeyModel
- * @package AuthExtension\Models
- */
 class OAuthPublicKeyModel extends Model {
 
     public function getTableName() {

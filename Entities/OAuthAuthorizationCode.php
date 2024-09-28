@@ -12,14 +12,15 @@ use OrmExtension\Extensions\Entity;
  * @property string $expires
  * @property string $scope
  * @property string $id_token
+ * @property string $code_challenge
+ * @property string code_challenge_method
  */
 class OAuthAuthorizationCode extends Entity {
-
 
     /**
      * @return \ArrayIterator|\RestExtension\Core\Entity[]|\Traversable|OAuthAuthorizationCode[]
      */
-    public function getIterator() {
+    public function getIterator(): \ArrayIterator {
         return parent::getIterator();
     }
 
