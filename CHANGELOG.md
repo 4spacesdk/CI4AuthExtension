@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.1.1 (2024-09-30)
+
+### Fixed bugs
+* Fix migration for v1.1.0 upgrade
+
+### Enhancements
+
+
+### Upgrade guide
+
+
+
 ## v1.1.0 (2024-09-28)
 
 ### Fixed bugs

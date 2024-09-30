@@ -24,6 +24,11 @@ class Upgrade_1_1_0 {
             ->column('nonce', ColumnTypes::VARCHAR_4095_NULL)
             ->column('claims', ColumnTypes::VARCHAR_4095_NULL);
 
+        // Add PKCE fields
+        Table::init('oauth_authorization_codes')
+            ->column('code_challenge', 'VARCHAR(1000)')
+            ->column('code_challenge_method', 'VARCHAR(20)');
+
         // Change primary key for tokens. To allow for tokens beyond the limit of primary key length.
         Database::connect()->query('alter table oauth_access_tokens drop primary key');
         Database::connect()->query('alter table oauth_access_tokens drop column id');
