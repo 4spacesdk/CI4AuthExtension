@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.1.2 (2024-01-01)
+
+### Fixed bugs
+* `[DEPRECATED] strlen(): Passing null to parameter #1 ($string) of type string is deprecated in VENDORPATH/4spacesdk/ci4authextension/OAuth2/ScopeUtil.php on line 13`
+
+### Enhancements
+
+
+### Upgrade guide
+
+
+
 ## v1.1.1 (2024-09-30)
 
 ### Fixed bugs
