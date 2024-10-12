@@ -1,6 +1,21 @@
 # Changelog
 
-## v1.1.2 (2024-01-01)
+## v1.2.0 (2024-10-12)
+
+### Fixed bugs
+
+
+### Enhancements
+* MFA
+
+### Upgrade guide
+1. You need to run migrations
+    ```
+    Upgrade_1_2_0::migrateUp();
+    ```
+
+
+## v1.1.2 (2024-10-01)
 
 ### Fixed bugs
 * `[DEPRECATED] strlen(): Passing null to parameter #1 ($string) of type string is deprecated in VENDORPATH/4spacesdk/ci4authextension/OAuth2/ScopeUtil.php on line 13`

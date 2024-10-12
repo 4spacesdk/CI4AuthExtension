@@ -11,6 +11,7 @@
  * @property string $password
  * @property bool $renew_password
  * @property string $scope
+ * @property string $mfa_secret_hash
  */
 trait UserTrait {
 

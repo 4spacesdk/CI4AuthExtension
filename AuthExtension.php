@@ -104,6 +104,11 @@ class AuthExtension {
         return false;
     }
 
+    public static function saveUserSession($id): void {
+        $session = session();
+        $session->set('user_id', $id);
+    }
+
     public static function authorize($scope = ''): array {
         return ServerLib::getInstance()->authorize(Request::createFromGlobals(), $scope);
     }

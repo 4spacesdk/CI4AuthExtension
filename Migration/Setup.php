@@ -15,6 +15,7 @@ class Setup {
             ->column('password', ColumnTypes::VARCHAR_255)
             ->column('renew_password', ColumnTypes::BOOL_0)
             ->column('scope', ColumnTypes::VARCHAR_4095_NULL)
+            ->column('mfa_secret_hash', ColumnTypes::VARCHAR_255)
             ->timestamps()
             ->softDelete();
 

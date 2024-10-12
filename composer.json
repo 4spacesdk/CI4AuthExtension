@@ -6,7 +6,8 @@
     "php": ">=7.2",
     "4spacesdk/ci4debugtool": "1.0.8",
     "bshaffer/oauth2-server-php": "v1.14.1",
-    "kelvinmo/simplejwt": "^0.5.3"
+    "kelvinmo/simplejwt": "^0.5.3",
+    "ext-openssl": "*"
   },
   "license": "MIT",
   "authors": [
