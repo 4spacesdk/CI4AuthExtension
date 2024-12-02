@@ -26,7 +26,7 @@ class Pdo extends \OAuth2\Storage\Pdo implements IdTokenStorageInterface {
 
         // if it exists, update it.
         if ($this->getIdToken($id_token)) {
-            $stmt = $this->db->prepare(sprintf('UPDATE %s SET client_id = :client_id, expires = :expires, user_id = :user_id, scope = :scope, claims = :claims where id_token = :id_token', $this->config['id_token_table']));
+            $stmt = $this->db->prepare(sprintf('UPDATE %s SET client_id = :client_id, expires = :expires, user_id = :user_id, claims = :claims where id_token = :id_token', $this->config['id_token_table']));
         } else {
             $stmt = $this->db->prepare(sprintf('INSERT INTO %s (id_token, client_id, expires, user_id, nonce, claims) VALUES (:id_token, :client_id, :expires, :user_id, :nonce, :claims)', $this->config['id_token_table']));
         }

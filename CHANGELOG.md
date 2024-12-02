@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.1 (2024-12-02)
+
+### Fixed bugs
+* Error when trying to update id_token
+
+### Enhancements
+
+
+### Upgrade guide
+
+
+
 ## v1.2.0 (2024-10-12)
 
 ### Fixed bugs
