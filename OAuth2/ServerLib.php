@@ -112,7 +112,7 @@ class ServerLib {
         if (isset($dbGroup['DSN']) && strlen($dbGroup['DSN']) > 0) {
             $dsn = $dbGroup['DSN'];
         } else {
-            $dsn = "mysql:dbname={$dbGroup['database']};host={$dbGroup['hostname']}";
+            $dsn = "mysql:dbname={$dbGroup['database']};host={$dbGroup['hostname']};port={$dbGroup['port']}";
         }
 
         return new Pdo(

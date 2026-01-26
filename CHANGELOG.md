@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.2 (2026-01-26)
+
+### Fixed bugs
+* Added port to dsn in OAuth2 storage config
+
+### Enhancements
+
+
+### Upgrade guide
+
+
+
 ## v1.2.1 (2024-12-02)
 
 ### Fixed bugs
