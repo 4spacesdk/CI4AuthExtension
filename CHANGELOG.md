@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.2.3 (2026-08-25)
+
+### Fixed bugs
+* Upgraded kelvinmo/simplejwt to ^1.1.2, resolving CVE-2026-33204 (unauthenticated
+  denial of service via JWE header tampering, affecting simplejwt <= 1.1.0). Composer
+  refuses to install the previous ^0.5.3 constraint because of this advisory.
+
+### Enhancements
+
+
+### Upgrade guide
+simplejwt 1.1.2 requires PHP 8.0, so the minimum PHP version is raised to 8.0.
+The only usage is presenting the public key on the JWKS endpoint, and that API is
+unchanged, so no calling code needs to be adjusted.
+
+
+
 ## v1.2.2 (2026-01-26)
 
 ### Fixed bugs
