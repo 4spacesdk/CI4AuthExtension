@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.2.4 (2026-08-25)
+
+### Fixed bugs
+
+
+### Enhancements
+* `enforce_pkce` and the JWT access token response type can now be turned off from
+  `Config\AuthExtension` via `$enforcePkce` and `$useJwtAccessTokens`. Both default to true,
+  so behaviour is unchanged for anyone who does not set them.
+
+### Upgrade guide
+Both settings carry a schema requirement, which is why they are now optional. `$enforcePkce`
+needs `code_challenge` and `code_challenge_method` on `oauth_authorization_codes`, and rejects
+clients that send no challenge. `$useJwtAccessTokens` stores the whole JWT, so
+`oauth_access_tokens.access_token` has to be wide enough for it. An application upgrading from
+before v1.1.0 that has not yet run `Migration\Upgrade_1_1_0` should set both to false.
+
+
+
 ## v1.2.3 (2026-08-25)
 
 ### Fixed bugs

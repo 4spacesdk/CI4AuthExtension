@@ -37,6 +37,20 @@ class AuthExtension extends BaseConfig {
     public int $oauthRefreshTokenLifeTime = 7 * DAY;
 
     /*
+     * If true, the authorization endpoint requires a PKCE code challenge and
+     * `oauth_authorization_codes` needs the `code_challenge` and `code_challenge_method` columns.
+     * Clients that do not send a challenge are rejected with 400 missing_code_challenge.
+     */
+    public bool $enforcePkce = true;
+
+    /*
+     * If true, access tokens are JWTs and the whole token string is stored, so
+     * `oauth_access_tokens.access_token` must be wide enough to hold it. If false, the server
+     * issues opaque tokens instead.
+     */
+    public bool $useJwtAccessTokens = true;
+
+    /*
      * Path to login page
      */
     public string $loginPage = '/login';

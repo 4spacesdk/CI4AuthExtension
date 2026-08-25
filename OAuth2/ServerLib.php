@@ -42,6 +42,33 @@ class ServerLib {
             'id_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
         ]);
 
+        $responseTypes = [
+            'code' => new \OAuth2\OpenID\ResponseType\AuthorizationCode($this->storage),
+            'id_token' => $idTokenResponseType,
+        ];
+
+        // Supplying the 'token' response type is what makes access tokens JWTs. Leave it out and
+        // the server builds its own AccessToken response type, which issues opaque tokens that fit
+        // a narrow column. See Config\AuthExtension::$useJwtAccessTokens.
+        if ($authConfig->useJwtAccessTokens ?? true) {
+            $responseTypes['token'] = new JwtAccessToken(
+                $this->storage,
+                $this->storage,
+                $this->storage,
+                [
+                    'issuer' => base_url('oauth'),
+                    'use_jwt_access_tokens' => true,
+                    'jwt_extra_payload_callable' => function(string $clientId, string $userId, ?string $scope) {
+                        return [
+                            'kid' => 'id1'
+                        ];
+                    },
+                    'access_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
+                ],
+                new JwtEncryption(),
+            );
+        }
+
         // OAuth 2.0 Server configuration.
         // Public & Private key are stored in the PDO storage.
         $this->server = new OAuth2Server(
@@ -56,7 +83,7 @@ class ServerLib {
                 'enforce_state' => true,
                 'require_exact_redirect_uri' => true,
                 'allow_implicit' => false,
-                'enforce_pkce' => true,
+                'enforce_pkce' => $authConfig->enforcePkce ?? true,
                 'allow_credentials_in_request_body' => true,
                 'allow_public_clients' => true,
                 'always_issue_new_refresh_token' => true,
@@ -76,26 +103,7 @@ class ServerLib {
             ],
 
             // Response Types
-            [
-                'code' => new \OAuth2\OpenID\ResponseType\AuthorizationCode($this->storage),
-                'id_token' => $idTokenResponseType,
-                'token' => new JwtAccessToken(
-                    $this->storage,
-                    $this->storage,
-                    $this->storage,
-                    [
-                        'issuer' => base_url('oauth'),
-                        'use_jwt_access_tokens' => true,
-                        'jwt_extra_payload_callable' => function(string $clientId, string $userId, ?string $scope) {
-                            return [
-                                'kid' => 'id1'
-                            ];
-                        },
-                        'access_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
-                    ],
-                    new JwtEncryption(),
-                )
-            ]
+            $responseTypes
         );
 
         $this->server->setScopeUtil(new ScopeUtil($this->storage));
