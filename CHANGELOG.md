@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.3.0 (1026-09-22)
+## v1.3.0 (2026-09-22)
 
 ### Enhancements
 * The signing key in `oauth_public_keys.private_key` is stored encrypted with the application's
