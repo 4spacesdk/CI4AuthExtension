@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.6 (2026-09-22)
+
+### Fixed bugs
+* The JSON Web Key Set named RS256 whatever the tokens were signed with. It names the algorithm
+  stored in `oauth_public_keys.encryption_algorithm` now, so a verifier that trusts the key set -
+  a push server, another service - accepts the tokens instead of refusing them as signed by
+  another algorithm.
+
+
+
 ## v1.2.5 (2026-08-25)
 
 ### Fixed bugs

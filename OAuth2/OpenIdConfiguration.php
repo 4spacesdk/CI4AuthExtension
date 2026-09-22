@@ -63,7 +63,12 @@ class OpenIdConfiguration {
      */
     public static function handleJwks(ResponseInterface $response): void {
         // Fetch public key from OAuth library
-        $publicKey = ServerLib::getInstance()->server->getStorage('public_key')->getPublicKey();
+        $storage = ServerLib::getInstance()->server->getStorage('public_key');
+        $publicKey = $storage->getPublicKey();
+
+        // The algorithm the tokens are signed with, as stored beside the key. A verifier that
+        // trusts the key set rejects a token whose algorithm differs from the one named here.
+        $algorithm = $storage->getEncryptionAlgorithm() ?: 'RS256';
 
         // Use SimpleJWT to present the public key
         $set = new KeySet();
@@ -80,7 +85,7 @@ class OpenIdConfiguration {
                 'kid' => 'id1',
                 'e' => $data['e'],
                 'n' => $data['n'],
-                'alg' => 'RS256',
+                'alg' => $algorithm,
             ];
         }
 
