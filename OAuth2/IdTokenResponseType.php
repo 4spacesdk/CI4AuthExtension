@@ -11,7 +11,7 @@ class IdTokenResponseType extends IdToken {
 
     protected IdTokenStorageInterface $tokenStorage;
 
-    public function __construct(UserClaimsInterface $userClaimsStorage, PublicKeyInterface $publicKeyStorage, IdTokenStorageInterface $tokenStorage, array $config = array(), EncryptionInterface $encryptionUtil = null) {
+    public function __construct(UserClaimsInterface $userClaimsStorage, PublicKeyInterface $publicKeyStorage, IdTokenStorageInterface $tokenStorage, array $config = array(), ?EncryptionInterface $encryptionUtil = null) {
         parent::__construct($userClaimsStorage, $publicKeyStorage, $config, $encryptionUtil);
         $this->tokenStorage = $tokenStorage;
     }

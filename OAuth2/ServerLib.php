@@ -37,10 +37,15 @@ class ServerLib {
 
         $this->storage = $this->getStorage();
 
+        // The `iss` of id tokens, and the base of the discovery document's endpoints. Not built
+        // from the request: `Host` is whatever the caller sends. See Config\AuthExtension::$issuer.
+        $issuer = rtrim($authConfig->issuer ?? '', '/') ?: rtrim(base_url(), '/');
+
+        $storage = $this->storage;
         $idTokenResponseType = new IdTokenResponseType($this->storage, $this->storage, $this->storage, [
-            'issuer' => ($_SERVER['HTTP_X_SCHEME'] ?? 'http') . '://' . $_SERVER['HTTP_HOST'],
+            'issuer' => $issuer,
             'id_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
-        ]);
+        ], new JwtEncryption(fn(array $payload) => $storage->getKeyId($payload['aud'] ?? null)));
 
         $responseTypes = [
             'code' => new \OAuth2\OpenID\ResponseType\AuthorizationCode($this->storage),
@@ -58,9 +63,9 @@ class ServerLib {
                 [
                     'issuer' => base_url('oauth'),
                     'use_jwt_access_tokens' => true,
-                    'jwt_extra_payload_callable' => function(string $clientId, string $userId, ?string $scope) {
+                    'jwt_extra_payload_callable' => function(string $clientId, string $userId, ?string $scope) use ($storage) {
                         return [
-                            'kid' => 'id1'
+                            'kid' => $storage->getKeyId($clientId)
                         ];
                     },
                     'access_lifetime' => $authConfig->oauthAccessTokenLifeTime ?? 900,
@@ -89,7 +94,7 @@ class ServerLib {
                 'always_issue_new_refresh_token' => true,
                 'unset_refresh_token_after_use' => true,
 
-                'issuer' => ($_SERVER['HTTP_X_SCHEME'] ?? 'http') . '://' . $_SERVER['HTTP_HOST'],
+                'issuer' => $issuer,
                 'refresh_token_lifetime' => $authConfig->oauthRefreshTokenLifeTime ?? (7 * DAY),
             ],
 

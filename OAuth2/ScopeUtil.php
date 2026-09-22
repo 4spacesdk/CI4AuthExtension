@@ -9,8 +9,8 @@ class ScopeUtil extends Scope {
         $requestedScopes = parent::getScopeFromRequest($request);
         $defaultScopes = parent::getDefaultScope();
         return implode(' ', array_unique(array_merge(
-            strlen($requestedScopes) ? explode(' ', $requestedScopes): [],
-            ($defaultScopes != null && strlen($defaultScopes)) ? explode(' ', $defaultScopes): []
+            (string)$requestedScopes !== '' ? explode(' ', $requestedScopes) : [],
+            (string)$defaultScopes !== '' ? explode(' ', $defaultScopes) : []
         )));
     }
 

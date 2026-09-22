@@ -52,7 +52,7 @@ class Setup {
             ->column('redirect_uri', ColumnTypes::VARCHAR_2047)
             ->column('expires', ColumnTypes::TIMESTAMP)
             ->column('scope', ColumnTypes::VARCHAR_4095_NULL)
-            ->column('id_token', ColumnTypes::VARCHAR_1023_NULL)
+            ->column('id_token', 'TEXT NULL')
             ->column('code_challenge', 'VARCHAR(1000)')
             ->column('code_challenge_method', 'VARCHAR(20)');
 
@@ -79,8 +79,11 @@ class Setup {
             ->create()
             ->column('client_id', 'VARCHAR(127)')
             ->column('public_key', ColumnTypes::VARCHAR_2047)
-            ->column('private_key', ColumnTypes::VARCHAR_4095)
+            ->column('private_key', ColumnTypes::TEXT)
             ->column('encryption_algorithm', ColumnTypes::VARCHAR_127, 'RS256');
+
+        Upgrade_1_3_0::addKeyRotationColumns();
+        Upgrade_1_3_0::addTokenIndexes();
     }
 
     public static function migrateDown() {

@@ -8,8 +8,10 @@ use OrmExtension\Migration\Table;
 class Upgrade_1_1_0 {
 
     public static function migrateUp() {
-        // Allow for larger private keys
-        Database::connect()->query('ALTER TABLE oauth_public_keys MODIFY private_key VARCHAR(4095) NOT NULL');
+        // Allow for larger private keys - TEXT since v1.3.0, where the key is stored encrypted and a
+        // 4096 bit one no longer fits in VARCHAR(4095). An application creating its key right after
+        // this upgrade would otherwise store it cut short.
+        Database::connect()->query('ALTER TABLE oauth_public_keys MODIFY private_key TEXT NOT NULL');
 
         // Allow to nullable client ids in public keys
         Database::connect()->query('ALTER TABLE oauth_public_keys MODIFY client_id VARCHAR(127)');

@@ -4,7 +4,6 @@ use AuthExtension\Entities\OAuthScope;
 use AuthExtension\Models\OAuthScopeModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use DebugTool\Data;
-use SimpleJWT\Keys\KeySet;
 use SimpleJWT\Keys\RSAKey;
 
 class OpenIdConfiguration {
@@ -14,7 +13,7 @@ class OpenIdConfiguration {
 
         $arr = [
             'issuer' => $baseUrl,
-            'jwks_uri' => $baseUrl . '/.well-known/openid-configuration/jwks',
+            'jwks_uri' => $baseUrl . '/openidconfiguration/jwks',
             'authorization_endpoint' => $baseUrl . '/authorize',
             'token_endpoint' => $baseUrl . '/token',
             'userinfo_endpoint' => $baseUrl . '/userinfo',
@@ -57,35 +56,32 @@ class OpenIdConfiguration {
     }
 
     /*
-     * JSON Web Key Set [JWK] document: /.well-known/openid-configuration/jwks
+     * JSON Web Key Set [JWK] document: /openidconfiguration/jwks
      *
      * @see https://tools.ietf.org/html/rfc7517
      */
     public static function handleJwks(ResponseInterface $response): void {
-        // Fetch public key from OAuth library
-        $storage = ServerLib::getInstance()->server->getStorage('public_key');
-        $publicKey = $storage->getPublicKey();
+        /** @var \Config\AuthExtension $authConfig */
+        $authConfig = config('AuthExtension');
 
-        // The algorithm the tokens are signed with, as stored beside the key. A verifier that
-        // trusts the key set rejects a token whose algorithm differs from the one named here.
-        $algorithm = $storage->getEncryptionAlgorithm() ?: 'RS256';
-
-        // Use SimpleJWT to present the public key
-        $set = new KeySet();
-        $set->add(new RSAKey($publicKey, 'pem'));
+        // The keys in use, and the ones retired while a token they signed can still be valid. Each
+        // under its own `kid` and with the algorithm stored beside it: a verifier that trusts the
+        // key set rejects a token whose algorithm differs from the one named here.
+        $keys = ServerLib::getInstance()->storage->getPublishedKeys($authConfig->oauthAccessTokenLifeTime ?? 900);
 
         $json = [
             'keys' => []
         ];
-        foreach ($set->getkeys() as $key) {
-            $data = $key->getKeyData();
+        foreach ($keys as $key) {
+            // SimpleJWT presents the public key
+            $data = (new RSAKey($key['public_key'], 'pem'))->getKeyData();
             $json['keys'][] = [
                 'kty' => $data['kty'],
                 'use' => 'sig',
-                'kid' => 'id1',
+                'kid' => $key['kid'],
                 'e' => $data['e'],
                 'n' => $data['n'],
-                'alg' => $algorithm,
+                'alg' => $key['encryption_algorithm'],
             ];
         }
 
