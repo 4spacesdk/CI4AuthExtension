@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.3.1 (2026-09-22)
+
+### Fixed bugs
+* The OAuth storage connects with TLS when the database group's `encrypt` asks for it. It built its
+  own connection from the group's host and credentials and left `encrypt` out, so tokens and the
+  signing key went to the database in the clear while the rest of the application used TLS. The
+  keys are those of CodeIgniter's MySQLi driver (`ssl_ca`, `ssl_capath`, `ssl_cert`, `ssl_key`,
+  `ssl_cipher`, `ssl_verify`); PDO needs at least one of the files to use TLS at all.
+
+
+
 ## v1.3.0 (2026-09-22)
 
 ### Enhancements

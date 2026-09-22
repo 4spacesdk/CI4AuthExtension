@@ -16,7 +16,8 @@ use CodeIgniter\Config\BaseConfig;
 class AuthExtension extends BaseConfig {
 
     /*
-     * Specify the database group
+     * Specify the database group. The storage connects with PDO, using the group's host,
+     * credentials and `encrypt` settings (TLS, see CHANGELOG v1.3.1).
      */
     public string $dbGroupName = 'default';
 

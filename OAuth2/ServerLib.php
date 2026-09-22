@@ -132,12 +132,47 @@ class ServerLib {
             [
                 'dsn' => $dsn,
                 'username' => $dbGroup['username'],
-                'password' => $dbGroup['password']
+                'password' => $dbGroup['password'],
+                'options' => str_starts_with($dsn, 'mysql:') ? self::pdoOptions($dbGroup) : [],
             ],
             [
                 'user_table' => 'users',
             ]
         );
+    }
+
+    /**
+     * The group's `encrypt` settings as PDO options, so the storage's own connection uses TLS
+     * whenever the application's does. It used to connect without, whatever the group said.
+     *
+     * Takes the same keys as CodeIgniter's MySQLi driver. Unlike MySQLi, PDO only turns TLS on
+     * when it is given a file to use - a CA, a CA path or a client certificate.
+     */
+    public static function pdoOptions(array $dbGroup): array {
+        $encrypt = $dbGroup['encrypt'] ?? false;
+        if (!is_array($encrypt)) {
+            return [];
+        }
+
+        $options = [];
+        foreach (['ssl_key' => 'SSL_KEY', 'ssl_cert' => 'SSL_CERT', 'ssl_ca' => 'SSL_CA',
+                     'ssl_capath' => 'SSL_CAPATH', 'ssl_cipher' => 'SSL_CIPHER'] as $key => $attribute) {
+            if (!empty($encrypt[$key])) {
+                $options[self::mysqlAttribute($attribute)] = $encrypt[$key];
+            }
+        }
+        if ($options !== [] && isset($encrypt['ssl_verify'])) {
+            $options[self::mysqlAttribute('SSL_VERIFY_SERVER_CERT')] = (bool) $encrypt['ssl_verify'];
+        }
+
+        return $options;
+    }
+
+    /**
+     * `Pdo\Mysql::ATTR_*` from PHP 8.4, where `PDO::MYSQL_ATTR_*` is deprecated from 8.5.
+     */
+    private static function mysqlAttribute(string $name): int {
+        return constant(class_exists(\Pdo\Mysql::class) ? "Pdo\\Mysql::ATTR_{$name}" : "PDO::MYSQL_ATTR_{$name}");
     }
 
     /**
