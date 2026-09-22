@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.2.7 (2026-09-22)
+
+### Fixed bugs
+* Issuing an id token that was already stored failed with `SQLSTATE[HY093]`: the update named five
+  parameters and was given six. It happens when the same id token is issued twice - the same user,
+  client and nonce within the same second, as when a sign-in page is loaded twice in quick
+  succession. The update sets the nonce as well now.
+
+
+
 ## v1.2.6 (2026-09-22)
 
 ### Fixed bugs
