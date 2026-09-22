@@ -4,8 +4,10 @@
   "type": "library",
   "require": {
     "php": ">=8.0",
+    "codeigniter4/framework": "^4.7",
     "4spacesdk/ci4debugtool": "1.0.8",
-    "bshaffer/oauth2-server-php": "v1.14.1",
+    "4spacesdk/ci4ormextension": "^1.1",
+    "bshaffer/oauth2-server-php": "^1.14.2",
     "kelvinmo/simplejwt": "^1.1.2",
     "ext-openssl": "*"
   },

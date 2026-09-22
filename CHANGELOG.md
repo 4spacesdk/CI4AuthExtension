@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.3.0 (unreleased)
+## v1.3.0 (1026-09-22)
 
 ### Enhancements
 * The signing key in `oauth_public_keys.private_key` is stored encrypted with the application's
@@ -34,6 +34,8 @@
   encryption key, the last step of rotating that key. Needs CodeIgniter 4.7 or later.
 
 ### Fixed bugs
+* Upgraded bshaffer/oauth2-server-php to ^1.14.2, which declares its nullable parameters for PHP 8.4
+  (20 deprecations in an application's test run).
 * Sign-out followed `post_logout_redirect_uri` wherever it pointed - an open redirect from the
   application's own address. It is followed only when it is a redirect uri registered on a client:
   the client named by a verified `id_token_hint` or by `client_id`, or any client without either.
@@ -53,6 +55,9 @@
   a route. It names `/openidconfiguration/jwks` now.
 
 ### Breaking changes
+* Requires `codeigniter4/framework` ^4.7 and `4spacesdk/ci4ormextension` ^1.1, which it always used
+  but did not declare. 4.7 is where `Config\Encryption::$previousKeys` came, which rotating the
+  encryption key depends on.
 * `checkLoginWithUsername($username, $scope = null)`: the unused `$password` parameter is gone. A
   call with three arguments throws an `ArgumentCountError` rather than checking the password as the
   scope.
